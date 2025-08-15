@@ -1,0 +1,7 @@
+SERVER:
+  PORT: 8080
+  NAME: "ms-go-simple-upload-download"
+UPLOAD:
+  DESTINATION_PATH: "file"
+DOWNLOAD:
+  SOURCE_PATH: "file"
