@@ -31,6 +31,14 @@ func (c *ControllerStruct) Upload(ctx *gin.Context) {
 		return
 	}
 
+	if file.Size > int64(c.config.Upload.LimitMB*1024*1024) {
+		ctx.JSON(400, dto.ErrorDto{
+			Status:  400,
+			Message: "File size is too large",
+		})
+		return
+	}
+
 	name := ctx.PostForm("name")
 	if name != "" {
 		ext := filepath.Ext(file.Filename)
@@ -49,6 +57,62 @@ func (c *ControllerStruct) Upload(ctx *gin.Context) {
 	ctx.JSON(200, dto.SuccessDto{
 		Status:  200,
 		Message: "File uploaded successfully",
+	})
+}
+
+func (c *ControllerStruct) MultiUpload(ctx *gin.Context) {
+
+	result := make([]dto.StatusDto, 0)
+
+	form, err := ctx.MultipartForm()
+	if err != nil {
+		ctx.JSON(400, dto.ErrorDto{
+			Status:  400,
+			Message: "Invalid form data",
+		})
+		return
+	}
+
+	files := form.File["files"]
+
+	if len(files) == 0 {
+		ctx.JSON(400, dto.ErrorDto{
+			Status:  400,
+			Message: "Files are required",
+		})
+		return
+	}
+
+	for _, file := range files {
+
+		status := dto.StatusDto{
+			Filename: file.Filename,
+			Status:   200,
+			Message:  "File uploaded successfully",
+		}
+
+		func() {
+			if file.Size > int64(c.config.Upload.LimitMB*1024*1024) {
+				status.Status = 400
+				status.Message = "File size is too large"
+				return
+			}
+
+			err = ctx.SaveUploadedFile(file, c.config.Upload.DestinationPath+"/"+file.Filename)
+			if err != nil {
+				status.Status = 500
+				status.Message = "Failed to save file"
+				return
+			}
+		}()
+
+		result = append(result, status)
+	}
+
+	ctx.JSON(200, dto.MultiResponseDto{
+		Status:  200,
+		Message: "Files uploaded successfully",
+		Data:    result,
 	})
 }
 

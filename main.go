@@ -18,6 +18,19 @@ func main() {
 	}
 
 	r := gin.Default()
+	r.Use(func(ctx *gin.Context) {
+
+		defer func() {
+			if err := recover(); err != nil {
+				ctx.JSON(500, dto.ErrorDto{
+					Status:  500,
+					Message: "Internal server error",
+				})
+			}
+		}()
+
+		ctx.Next()
+	})
 
 	r.NoRoute(func(c *gin.Context) {
 		c.JSON(404, dto.ErrorDto{
@@ -34,6 +47,7 @@ func main() {
 
 	ctrl := controllers.ProvideController(configs)
 	r.POST("/upload", ctrl.Upload)
+	r.POST("/multi-upload", ctrl.MultiUpload)
 	r.GET("/list", ctrl.ListFiles)
 	r.GET("/download/:filename", ctrl.Download)
 

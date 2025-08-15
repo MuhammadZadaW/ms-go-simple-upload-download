@@ -14,6 +14,7 @@ type ConfigStruct struct {
 	} `mapstructure:"SERVER"`
 	Upload struct {
 		DestinationPath string `mapstructure:"DESTINATION_PATH"`
+		LimitMB         int    `mapstructure:"LIMIT_MB"`
 	} `mapstructure:"UPLOAD"`
 	Download struct {
 		SourcePath string `mapstructure:"SOURCE_PATH"`
@@ -56,6 +57,10 @@ func LoadConfig() (*ConfigStruct, error) {
 			log.Println("Failed to create download directory")
 			return nil, err
 		}
+	}
+
+	if config.Upload.LimitMB == 0 {
+		config.Upload.LimitMB = 1
 	}
 
 	return &config, nil

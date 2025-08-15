@@ -3,5 +3,6 @@ SERVER:
   NAME: "ms-go-simple-upload-download"
 UPLOAD:
   DESTINATION_PATH: "file"
+  LIMIT_MB: 1
 DOWNLOAD:
   SOURCE_PATH: "file"
