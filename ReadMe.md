@@ -31,3 +31,5 @@ go run main.go
 ## Development Note
 - Go 1.23.2
 - Development on Windows
+
+See [APIDocs.md](docs/APIDocs.md) for detailed endpoint specifications.
