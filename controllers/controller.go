@@ -45,7 +45,7 @@ func (c *ControllerStruct) Upload(ctx *gin.Context) {
 		file.Filename = fmt.Sprintf("%s%s", name, ext)
 	}
 
-	err = ctx.SaveUploadedFile(file, c.config.Upload.DestinationPath+"/"+file.Filename)
+	err = ctx.SaveUploadedFile(file, filepath.Join(c.config.Upload.DestinationPath, file.Filename))
 	if err != nil {
 		ctx.JSON(500, dto.ErrorDto{
 			Status:  500,
@@ -98,7 +98,7 @@ func (c *ControllerStruct) MultiUpload(ctx *gin.Context) {
 				return
 			}
 
-			err = ctx.SaveUploadedFile(file, c.config.Upload.DestinationPath+"/"+file.Filename)
+			err = ctx.SaveUploadedFile(file, filepath.Join(c.config.Upload.DestinationPath, file.Filename))
 			if err != nil {
 				status.Status = 500
 				status.Message = "Failed to save file"
@@ -151,7 +151,7 @@ func (c *ControllerStruct) Download(ctx *gin.Context) {
 		return
 	}
 
-	_, err := os.Stat(c.config.Download.SourcePath + "/" + filename)
+	_, err := os.Stat(filepath.Join(c.config.Download.SourcePath, filename))
 	if os.IsNotExist(err) {
 		ctx.JSON(404, dto.ErrorDto{
 			Status:  404,
@@ -160,5 +160,5 @@ func (c *ControllerStruct) Download(ctx *gin.Context) {
 		return
 	}
 
-	ctx.FileAttachment(c.config.Download.SourcePath+"/"+filename, filename)
+	ctx.FileAttachment(filepath.Join(c.config.Download.SourcePath, filename), filename)
 }
