@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github-port/ms-go-simple-upload-download/configs"
-	"github-port/ms-go-simple-upload-download/controllers"
-	"github-port/ms-go-simple-upload-download/dto"
+	"ms-go-simple-upload-download/configs"
+	"ms-go-simple-upload-download/controllers"
+	"ms-go-simple-upload-download/dto"
 
 	"github.com/gin-gonic/gin"
 )

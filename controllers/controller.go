@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"fmt"
-	"github-port/ms-go-simple-upload-download/configs"
-	"github-port/ms-go-simple-upload-download/dto"
+	"ms-go-simple-upload-download/configs"
+	"ms-go-simple-upload-download/dto"
 	"os"
 	"path/filepath"
 

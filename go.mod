@@ -1,4 +1,4 @@
-module github-port/ms-go-simple-upload-download
+module ms-go-simple-upload-download
 
 go 1.23.2
 
